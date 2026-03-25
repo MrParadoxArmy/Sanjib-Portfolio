@@ -355,14 +355,15 @@
     padding: 30px;
   }
   .what-content p {
-    font-size: 11px;
+    font-size: 13px;
+    line-height: 19px;
   }
   .what-noTouch:hover,
   .what-content-active {
     padding: 10px 30px;
   }
   .what-tags {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .what-noTouch:hover ~ .what-content,
@@ -371,7 +372,7 @@
     padding: 5px 30px;
   }
   .what-content h3 {
-    font-size: 25px;
+    font-size: 28px;
   }
 }
 @media only screen and (max-width: 550px) {
@@ -402,16 +403,16 @@
   }
 
   .what-content h3 {
-    font-size: 20px;
+    font-size: 22px;
   }
 
   .what-content h4 {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .what-content p {
-    font-size: 10px;
-    line-height: 15px;
+    font-size: 12px;
+    line-height: 18px;
   }
 
   .what-content {
@@ -430,8 +431,8 @@
   }
 
   .what-tags {
-    font-size: 10px;
-    padding: 1px 5px;
+    font-size: 11px;
+    padding: 2px 6px;
   }
 }
 

@@ -117,7 +117,7 @@ a.contact-social {
 
 @media only screen and (max-width: 480px) {
   .contact-section h3 {
-    font-size: 28px;
+    font-size: 32px;
   }
 
   .contact-section {
@@ -126,11 +126,12 @@ a.contact-social {
   }
 
   a.contact-social {
-    font-size: 16px;
+    font-size: 17px;
   }
 
   .contact-box h2 {
-    font-size: 15px;
+    font-size: 16px;
+    line-height: 23px;
   }
 
   .contact-flex {

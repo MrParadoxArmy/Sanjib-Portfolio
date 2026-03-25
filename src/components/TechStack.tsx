@@ -29,40 +29,46 @@ const sphereGeometry = new THREE.SphereGeometry(1, 28, 28);
 
 const spheres = [...Array(30)].map(() => ({
   scale: [0.7, 1, 0.8, 1, 1][Math.floor(Math.random() * 5)],
+  materialIndex: Math.floor(Math.random() * imageUrls.length),
+  position: [
+    THREE.MathUtils.randFloatSpread(20),
+    THREE.MathUtils.randFloatSpread(20) - 25,
+    THREE.MathUtils.randFloatSpread(20) - 10,
+  ] as [number, number, number],
 }));
 
 type SphereProps = {
-  vec?: THREE.Vector3;
   scale: number;
-  r?: typeof THREE.MathUtils.randFloatSpread;
   material: THREE.MeshPhysicalMaterial;
   isActive: boolean;
+  position: [number, number, number];
 };
 
 function SphereGeo({
-  vec = new THREE.Vector3(),
   scale,
-  r = THREE.MathUtils.randFloatSpread,
   material,
   isActive,
+  position,
 }: SphereProps) {
   const api = useRef<RapierRigidBody | null>(null);
+  const impulseVector = useRef(new THREE.Vector3());
 
   useFrame((_state, delta) => {
-    if (!isActive) return;
+    if (!isActive || !api.current) return;
     delta = Math.min(0.1, delta);
-    const impulse = vec
-      .copy(api.current!.translation())
+    const translation = api.current.translation();
+    impulseVector.current
+      .set(translation.x, translation.y, translation.z)
       .normalize()
       .multiply(
         new THREE.Vector3(
-          -50 * delta * scale,
-          -150 * delta * scale,
-          -50 * delta * scale
+          -18 * delta * scale,
+          -54 * delta * scale,
+          -18 * delta * scale
         )
       );
 
-    api.current?.applyImpulse(impulse, true);
+    api.current.applyImpulse(impulseVector.current, true);
   });
 
   return (
@@ -70,7 +76,7 @@ function SphereGeo({
       linearDamping={0.75}
       angularDamping={0.15}
       friction={0.2}
-      position={[r(20), r(20) - 25, r(20) - 10]}
+      position={position}
       ref={api}
       colliders={false}
     >
@@ -99,9 +105,15 @@ type PointerProps = {
 
 function Pointer({ vec = new THREE.Vector3(), isActive }: PointerProps) {
   const ref = useRef<RapierRigidBody>(null);
+  const offscreen = useRef(new THREE.Vector3(100, 100, 100));
 
   useFrame(({ pointer, viewport }) => {
-    if (!isActive) return;
+    if (!ref.current) return;
+    if (!isActive) {
+      ref.current.setNextKinematicTranslation(offscreen.current);
+      return;
+    }
+
     const targetVec = vec.lerp(
       new THREE.Vector3(
         (pointer.x * viewport.width) / 2,
@@ -127,31 +139,29 @@ function Pointer({ vec = new THREE.Vector3(), isActive }: PointerProps) {
 
 const TechStack = () => {
   const [isActive, setIsActive] = useState(false);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const threshold = document
-        .getElementById("work")!
-        .getBoundingClientRect().top;
-      setIsActive(scrollY > threshold);
+    const updateIsActive = () => {
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const isVisible =
+        rect.top < viewportHeight * 0.8 && rect.bottom > viewportHeight * 0.2;
+
+      setIsActive(isVisible);
     };
-    document.querySelectorAll(".header a").forEach((elem) => {
-      const element = elem as HTMLAnchorElement;
-      element.addEventListener("click", () => {
-        const interval = setInterval(() => {
-          handleScroll();
-        }, 10);
-        setTimeout(() => {
-          clearInterval(interval);
-        }, 1000);
-      });
-    });
-    window.addEventListener("scroll", handleScroll);
+
+    updateIsActive();
+    window.addEventListener("scroll", updateIsActive);
+    window.addEventListener("resize", updateIsActive);
+
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", updateIsActive);
+      window.removeEventListener("resize", updateIsActive);
     };
   }, []);
+
   const materials = useMemo(() => {
     return textures.map(
       (texture) =>
@@ -168,7 +178,7 @@ const TechStack = () => {
   }, []);
 
   return (
-    <div className="techstack">
+    <div className="techstack" ref={sectionRef}>
       <h2> My Techstack</h2>
 
       <Canvas
@@ -194,7 +204,7 @@ const TechStack = () => {
             <SphereGeo
               key={i}
               {...props}
-              material={materials[Math.floor(Math.random() * materials.length)]}
+              material={materials[props.materialIndex]}
               isActive={isActive}
             />
           ))}
