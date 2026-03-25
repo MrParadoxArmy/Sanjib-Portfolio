@@ -1,4 +1,4 @@
-declare module "gsap-trial/SplitText" {
+declare module "gsap/SplitText" {
   import { Element as GstElement } from "gsap";
 
   interface SplitTextOptions {

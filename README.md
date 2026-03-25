@@ -56,7 +56,7 @@ npm install
 npm run dev
 ```
 
-> ⚠️ **Note:** GSAP Club plugins have been replaced with trial plugins. The trial version **cannot be used for hosting**. For production, grab a Club GSAP license: [gsap.com](https://gsap.com/docs/v3/Installation/)
+> GSAP and the formerly members-only plugins are now available from the standard `gsap` package, so a normal `npm install` is enough for production deployments.
 
 ---
 

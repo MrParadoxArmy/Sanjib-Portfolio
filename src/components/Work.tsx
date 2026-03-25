@@ -3,36 +3,38 @@ import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
 
+const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
+
 const projects = [
   {
     title: "Network Sniffer Tool",
     category: "Cyber Security",
     tools: "Python, Wireshark, Live Traffic Analysis",
-    image: "/images/developer-identifying-server-issues.jpg",
+    image: asset("images/developer-identifying-server-issues.jpg"),
   },
   {
     title: "Phishing Awareness Modules",
     category: "Cyber Security",
     tools: "HTML, CSS, Educational Frameworks",
-    image: "/images/phishing.webp",
+    image: asset("images/phishing.webp"),
   },
   {
     title: "Real-time Translation Tool",
     category: "Artificial Intelligence",
     tools: "Python, NLP, ML Models",
-    image: "/images/translator_3.jpg",
+    image: asset("images/translator_3.jpg"),
   },
   {
     title: "NLP-based FAQ Chatbot",
     category: "Artificial Intelligence",
     tools: "Python, TensorFlow, Scikit-learn",
-    image: "/images/195.jpg",
+    image: asset("images/195.jpg"),
   },
   {
     title: "Music Generation Model",
     category: "Deep Learning",
     tools: "Python, Deep Learning, AI Models",
-    image: "/images/music generation model pc.jpeg",
+    image: asset("images/music generation model pc.jpeg"),
   },
 ];
 
